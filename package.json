@@ -14,6 +14,7 @@
   "dependencies": {
     "@google-cloud/language": "^4.0.0",
     "@google-cloud/text-to-speech": "^2.3.0",
+    "@sendgrid/mail": "^7.1.0",
     "bad-words": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

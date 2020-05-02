@@ -79,7 +79,7 @@ io.on('connection',(socket) => {
     if(currentIndex == room.participants.length) {
       io.to(roomId).emit("tts", utils.getTTS("conclusion"));
       io.to(roomId).emit("done");
-      utils.sendEmails(room.participants);
+      utils.sendEmails(room.participants.map(x => x.email));
     }
     else{
       const currentStudent = room.participants[currentIndex];
@@ -126,6 +126,15 @@ app.get("/api/googleLanguage", function(req, res) {
     console.log(sentiment);
     res.send(sentiment);
   });
+
+});
+
+app.get("/api/send_email", function(req, res) {
+  // const email = req.param('email');
+  const email = "edwin.j.yu@gmail.com";
+  
+  utils.sendEmails([email]);
+  res.send(`sent email to ${email}`)
 
 });
 
