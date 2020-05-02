@@ -1,0 +1,99 @@
+<video id="video" height="1000" width="1000" autoPlay hidden></video>
+<button onclick="ttsTest()">tts</button>
+<button onclick="cheerTest()">cheer</button>
+<canvas id="canvas" width="250" height="250"></canvas>
+<canvas id="shared" width="250" height="250"></canvas>
+<audio id="cheerAudio" src="./CheerSFX.mp3">
+<audio id="ttsAudio" src="">
+
+<script src = "./node_modules/ml5/dist/ml5.js"></script>
+<script src = "./node_modules/socket.io-client/dist/socket.io.js"></script>
+
+<script>
+    const video = document.getElementById('video')
+    const canvas = document.getElementById('canvas')
+    const shared = document.getElementById('shared')
+    const ctx = canvas.getContext('2d')
+    const sharedctx = shared.getContext('2d')
+    const FPS = 10
+    const ttsAudio = document.getElementById('ttsAudio')
+    const cheerAudio = document.getElementById('cheerAudio')
+    let isFocused = true
+    let recieved = false;
+
+
+
+    const socket = io('http://localhost:5000');
+    socket.emit("joinRoom",0,"joon","sj78sj78",true)
+    socket.on("shareVideo",(image64)=>{
+        let img = new Image
+        img.onload = () => {
+            sharedctx.drawImage(img,0,0)
+        }
+        img.src = image64
+    })
+
+    socket.on("playCheer",()=>{
+        cheerAudio.pause()
+        cheerAudio.currentTime = 0
+        cheerAudio.play()
+    })
+
+
+    socket.on("tts",(audio)=>{
+        ttsAudio.pause()
+        ttsAudio.currentTime = 0
+        const blob = new Blob([audio], { type: "audio/wav" });
+        const url = window.URL.createObjectURL(blob);
+        ttsAudio.src = url;
+        ttsAudio.play()
+    })
+
+
+    poseNet = ml5.poseNet(()=>{console.log("ready!")});
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+            })
+            .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    intervalID = window.setInterval(
+        ()=>{
+            let shortside = Math.min(video.videoWidth,video.videoHeight)
+            let ydiff = (video.videoHeight - shortside)/2
+            let xdiff = (video.videoWidth - shortside)/2
+            ctx.drawImage(video,xdiff,ydiff,shortside,shortside,
+                0,0,canvas.width,canvas.height)
+            
+            poseNet.singlePose(canvas)
+            .then(results => {
+                if(isFocused && handsPresent(results) && !recieved){
+                    recieved = true
+                    console.log("fuck")
+                    socket.emit("getDiploma",0)
+                }
+            })
+            socket.emit("sendVideoFrames",0,canvas.toDataURL())
+            
+
+        
+        },1000/FPS)
+
+    function handsPresent(results){
+        return (results[0].pose.leftWrist.confidence > 0.6 || results[0].pose.rightWrist.confidence > 0.6)
+    }
+
+    function ttsTest(){
+        socket.emit("ttsreq",0,"Fuck")
+    }
+
+    function cheerTest(){
+        socket.emit("getDiploma",0)
+    }
+</script>

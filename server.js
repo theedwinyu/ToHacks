@@ -35,13 +35,18 @@ io.on('connection',(socket) => {
   
   socket.on("chat",(roomId, name, message)=>{
     console.log(`${name} sent comment to ${roomId}: ${message}`);
-    if(!utils.hasProfanity(message) && utils.checkSentiment(message).score > 0){
-      io.to(roomID).emit("newMessage", name, message);
+    if(!utils.hasProfanity(message)){
+      utils.checkSentiment(message)
+      .then((result)=>{
+        if(result.score >= 0){
+          io.to(roomID).emit("newMessage", name, message);
+        }
+      })
     }
   })
 
   socket.on("joinRoom",(roomId, name, email, isNewRoom)=>{
-    console.log(allRooms);
+    console.log(JSON.stringify(allRooms));
   
     if (isNewRoom) {
       console.log(`${name}(${email}) created room: ${roomId}`);
@@ -65,9 +70,11 @@ io.on('connection',(socket) => {
         email,
       }];
     }
+
+
     
     io.to(roomId).emit("newMessage", name, `${name} has joined!`);
-    console.log(allRooms);
+    console.log(JSON.stringify(allRooms));
     socket.join(roomId)
   })
 
@@ -100,6 +107,12 @@ io.on('connection',(socket) => {
 
   socket.on("sendVideoFrames", (roomId, image64) => {
     io.to(roomId).emit("shareVideo", image64);
+  })
+
+  socket.on("ttsreq",(roomId,msg)=>{
+    utils.getTTS(msg).then(audio => {
+      io.to(roomId).emit("tts", audio)
+    });
   })
 
 })
