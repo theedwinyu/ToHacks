@@ -6,8 +6,10 @@ router.route("/add").post((req, res) => {
   const classOf = req.body.classOf;
   const timeStarted = req.body.timeStarted;
   const authToken = req.body.authToken;
+  const creator = req.body.creator;
 
   const newGraduation = new Graduation({
+    creator,
     collegeName,
     classOf,
     timeStarted,
@@ -33,7 +35,7 @@ router.route("/updateParticipant").post((req, res) => {
     if (user.length === 0) {
       res.json("Room does not exist!!");
     } else {
-      graduation[0].participants.push(participant);
+      graduation[0].participants.push(whoAreYou);
       graduation[0]
         .save()
         .then(() => res.json("User updated!"))

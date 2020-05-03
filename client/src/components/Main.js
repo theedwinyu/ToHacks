@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { Modal, Row, Col, Button } from 'antd';
 import TextField from '@material-ui/core/TextField';
 import Logo from '../assets/logo.png';
+import axios from 'axios';
 
 class Main extends Component {
   constructor() {
@@ -36,6 +37,15 @@ class Main extends Component {
       joinRedirect: true,
       createRedirect: false,
     });
+
+    const graduationInfo = {
+      authToken: this.state.roomId,
+      whoAreYou: this.state.name,
+    };
+
+    // axios.post("http://localhost:5000/graduations/updateParticipant", graduationInfo).then((res) => {
+    //   console.log(res);
+    // });
   };
 
   handleCancel = e => {
