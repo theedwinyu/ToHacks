@@ -107,6 +107,7 @@ io.on('connection',(socket) => {
   })
 
   socket.on("getDiploma", (roomId) => {
+    console.log("FUCK")
     io.to(roomId).emit("playCheer");
   })
 
