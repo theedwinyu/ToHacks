@@ -103,7 +103,7 @@ io.on("connection", (socket) => {
         io.to(roomId).emit("tts", audio);
         io.to(roomId).emit("done");
 
-        utils.sendEmails(room.participants.map((x) => x.email));
+        utils.sendEmails(room.participants);
       });
     } else {
       if(currentIndex < room.participants.length){
