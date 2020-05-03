@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import io from 'socket.io-client';
 import ml5 from 'ml5';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Alert } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
