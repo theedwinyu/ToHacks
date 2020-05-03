@@ -183,12 +183,15 @@ class Room extends Component {
     }
 
     goNext = (socket) => {
+        console.log("uwu");
         if(socket){
             socket.emit("processPerson",this.props.location.state.roomId)
         }
+
     }
   
     startGraduation = (socket) => {
+        console.log("gay");
         const {
             universityName,
             classOf,
@@ -214,24 +217,27 @@ class Room extends Component {
         const debug = false
         return (
             <div>
+                
+                <div className = "topRight" >
+                    {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', marginLeft:'20vh', borderRadius: "10px"}}>Start Graduation</Button>}
+                    {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', borderRadius: "10px"}}>Next Student</Button>}
+                </div>
+
                 {this.state.done ? <Confetti width={window.innerWidth} height={window.innerHeight}/>:null}
                 <div className="roomContainer"> 
                     
                     <Row>
-                    <Col span={16}>
+                    <Col span={14} style ={{textAlign: 'left'}}>
                         <div>
                         <img src={Logo} style={{width:'40vh', height:'auto',display:'inline-block' }} />
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', marginLeft:'20vh'}}>Start Graduation</Button>}
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block'}}>Next Student</Button>}
                         </div>
                         <div>
                         <h1 style={{display:'inline-block'}}>{`${this.state.universityName} class of ${this.state.classOf}`}</h1>
                         {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
                         </div>
                         <div className="camBackground">
-                        <img src={Diploma} id="diploma" style={{width:120, height:'auto', opacity:0}}></img>
-                            <canvas id="shared" width="400" height="400" style={{opacity:0,borderRadius:200,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
-                            
+                            <canvas id="shared" width="400" height="400" style={{opacity:0,borderRadius:200,borderStyle: "solid",borderWidth:15,borderColor:"white",marginLeft:"15vw",marginTop:"5vh"}}></canvas>
+                            <img src={Diploma} id="diploma" style={{width:120, height:'auto', opacity:0}}></img>
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
@@ -242,7 +248,7 @@ class Room extends Component {
                         
                         <audio id="ttsAudio" src=""/>
                     </Col>
-                    <Col span={8} style={{marginTop:'12vh'}}>
+                    <Col span={6} style={{marginTop:'15vh', marginLeft: "13vh", textAlign: 'left'}}>
                         <div>
                             <h1 style={{color: '#002A52', display:'inline-block'}}>Chat&nbsp;&nbsp;</h1>
                         </div>

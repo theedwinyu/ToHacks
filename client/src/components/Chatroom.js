@@ -69,9 +69,9 @@ class Chatroom extends Component {
         } = this.props;
         return (
             <div>
-                <Card style={{ width: '70vh', height: '64vh', backgroundColor: '#A2BBD5', borderRadius: '10px' }}>
+                <Card style={{ width: '50vh', height: '57vh', backgroundColor: '#A2BBD5', borderRadius: '10px' }}>
                     <List
-                    style={{overflowY:'scroll', height: '50vh', textAlign: 'left'}}
+                    style={{overflowY:'scroll', height: '45vh', textAlign: 'left'}}
                     split={false}
                     bordered
                     dataSource={this.state.comments}

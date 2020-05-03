@@ -35,8 +35,10 @@ code {
   align-items: center;
   background-position: top center;
   border-radius: 10px ;
+  width: 100vh;
   height: 100vh;
   flex-direction: column;
+  margin-top: 3vh;
 }
 
 .roomContainer{
@@ -52,6 +54,12 @@ code {
   position: relative;
   animation:diplomanimation 3s forwards;
   z-index:10
+}
+
+.topRight {
+  position:absolute;
+  top:5vh;
+  right:22vh;
 }
 
 @keyframes fadein{
@@ -84,17 +92,17 @@ code {
 @keyframes diplomanimation{
   0% {
       opacity:0;
-      left:-70px;
+      left:70px;
       top:-120px;
   }
   30%,70% {
       opacity:1;
-      left:30px;
+      left:-30px;
       top:-120px;
   }
   100% {
       opacity:0;
-      left:130px;
+      left:-130px;
       top:-120px;
   }
 }
