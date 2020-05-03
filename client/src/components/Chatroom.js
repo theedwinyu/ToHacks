@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { Button, Input, List, Card, Typography } from 'antd';
+import { Button, Input, List, Card, Typography, message } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Text } = Typography;
 const { Search } = Input;
@@ -38,15 +39,23 @@ class Chatroom extends Component {
 
     }
 
-    handleSubmit = (message) => {
-        console.log(message);
+    handleSubmit = (text) => {
+        console.log(text);
         const {
             socket, 
             name,
             roomId,
         } = this.props;
 
-        socket.emit("chat", roomId, name, message);
+        socket.emit("chat", roomId, name, text);
+
+        axios.get(`http://localhost:5000/api/googleLanguage?text=${text}`, ).then((res) => {
+            
+            const score = res.data.score;
+            if(score < 0) {
+                message.error(`Sentiment score too low (${score}), please send a more positive message =D`, 1.5);
+            }
+        });
         
         // this.setState({
         //     comments: [...this.state.comments, {name, message}]

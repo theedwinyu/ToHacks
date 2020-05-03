@@ -55,7 +55,7 @@ sendEmails = (participants) => {
         sgMail.send(msg).then(() => {
             console.log('Message sent')
         }).catch((error) => {
-            console.log(error.response.body)
+            console.log(JSON.stringify(error))
         })
     })
     return true;

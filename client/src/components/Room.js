@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import io from 'socket.io-client';
 import ml5 from 'ml5';
-import { Button, Row, Col } from 'antd';
+import { Button, Row, Col, Alert } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
@@ -117,6 +117,8 @@ class Room extends Component {
         }
 
         const options = {
+            detectionType: 'single',
+            
         }
         const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
         function modelLoaded() {
@@ -235,7 +237,7 @@ class Room extends Component {
                         </div>
                         <div className="camBackground">
                             <canvas id="shared" width="400" height="400" style={{opacity:0,borderRadius:200,borderStyle: "solid",borderWidth:15,borderColor:"white",marginLeft:"15vw",marginTop:"5vh"}}></canvas>
-                            <img src={Diploma} id="diploma" style={{width:60, height:'auto', opacity:0}}></img>
+                            <img src={Diploma} id="diploma" style={{width:120, height:'auto', opacity:0}}></img>
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}

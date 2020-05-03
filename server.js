@@ -106,15 +106,17 @@ io.on("connection", (socket) => {
         utils.sendEmails(room.participants.map((x) => x.email));
       });
     } else {
-      const currentStudent = room.participants[currentIndex];
-
-      const processStudentMessage = `${currentStudent.name} please wave to the audience.`;
-      utils.getTTS(processStudentMessage).then((audio) => {
-        io.to(roomId).emit("tts", audio);
-        io.to(roomId).emit("processPersonName", currentStudent.name);
-
-        room.index += 1;
-      });
+      if(currentIndex < room.participants.length){
+        const currentStudent = room.participants[currentIndex];
+  
+        const processStudentMessage = `${currentStudent.name} please wave to the audience.`;
+        utils.getTTS(processStudentMessage).then((audio) => {
+          io.to(roomId).emit("tts", audio);
+          io.to(roomId).emit("processPersonName", currentStudent.name);
+  
+          room.index += 1;
+        });
+      }
     }
 
     console.log("processed");
