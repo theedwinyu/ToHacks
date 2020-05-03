@@ -87,7 +87,8 @@ io.on("connection", (socket) => {
     const currentIndex = room.index;
 
     if (currentIndex == room.participants.length) {
-      utils.getTTS("conclusion").then((audio) => {
+      const conclusionMessage = `Once again, Congraduations to everyone in this room! You made it!`;
+      utils.getTTS(conclusionMessage).then((audio) => {
         io.to(roomId).emit("tts", audio);
         io.to(roomId).emit("done");
 
@@ -96,7 +97,8 @@ io.on("connection", (socket) => {
     } else {
       const currentStudent = room.participants[currentIndex];
 
-      utils.getTTS(currentStudent.name).then((audio) => {
+      const processStudentMessage = `${currentStudent.name} please wave to the audience.`;
+      utils.getTTS(processStudentMessage).then((audio) => {
         io.to(roomId).emit("tts", audio);
         io.to(roomId).emit("processPersonName", currentStudent.name);
 
@@ -108,13 +110,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on("getDiploma", (roomId) => {
-    console.log("FUCK");
     io.to(roomId).emit("playCheer");
   });
 
   socket.on("sendVideoFrames", (roomId, image64) => {
     io.to(roomId).emit("shareVideo", image64);
   });
+
+  socket.on("startGraduation", (roomId, universityName, classOf) => {
+    const message = `Good morning class of ${classOf}. It is my very great pleasure to welcome you all to ${universityName}'s virtual commencement. 
+    Congratulations. Today is a day to acknowledge and celebrate your unwavering commitment to advance the causes and the knowledge that matter most in this time and to you.`
+    
+    utils.getTTS(message).then((audio) => {
+      io.to(roomId).emit("tts", audio);
+    });
+  })
 
   socket.on("ttsreq", (roomId, msg) => {
     utils.getTTS(msg).then((audio) => {
