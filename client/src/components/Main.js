@@ -10,17 +10,19 @@ class Main extends Component {
   constructor() {
     super();
     this.state = {
-      joinRedirect: false,
+      visible: false,
       createRedirect: false,
     };
   }
 
-  joinRoomClick = () => {
-    this.setState({ joinRedirect: true, createRedirect: false });
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
   };
 
   createRoomClick = () => {
-    this.setState({ createRedirect: true, joinRedirect: false });
+    this.setState({ createRedirect: true, visible: false });
   };
 
   render() {
@@ -57,7 +59,7 @@ class Main extends Component {
               image={joinIcon}
               title={"Join a Ceremony"}
               subText={"Student, Family, Friends"}
-              action = {this.joinRoomClick}
+              action = {this.showModal}
             />
           </Grid>
           <Grid item xs={3}>
@@ -69,6 +71,18 @@ class Main extends Component {
             />
           </Grid>
         </Grid>
+        
+        {/* <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal> */}
+
       </div>
     );
   }
