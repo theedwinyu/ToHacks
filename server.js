@@ -180,10 +180,10 @@ app.get("/api/googleLanguage", function (req, res) {
 
 app.get("/api/send_email", function (req, res) {
   // const email = req.param('email');
-  const email = "edwin.j.yu@gmail.com";
 
-  utils.sendEmails([email]);
-  res.send(`sent email to ${email}`);
+  // utils.sendEmails([email]);
+  // res.send(`sent email to ${email}`);
+  res.send('sent email');
 });
 
 server.listen(port, () => {

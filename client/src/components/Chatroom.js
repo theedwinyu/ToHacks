@@ -12,13 +12,7 @@ class Chatroom extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            comments: [
-                {message: 'I love you.', name:"Bob"},
-                {message: 'I also love you.', name:"Joe"},
-                {message: 'We are happy.', name:"Sam"},
-                {message: 'very happy.', name:"Andy"},
-                {message: 'yay us!!!.', name:"Steve"},
-            ],
+            comments: [],
         }
     }
 
