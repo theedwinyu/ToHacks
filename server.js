@@ -71,8 +71,6 @@ io.on('connection',(socket) => {
       }];
     }
 
-
-    
     io.to(roomId).emit("newMessage", name, `${name} has joined!`);
     console.log(JSON.stringify(allRooms));
     socket.join(roomId)
@@ -84,17 +82,24 @@ io.on('connection',(socket) => {
     const currentIndex = room.index;
 
     if(currentIndex == room.participants.length) {
-      io.to(roomId).emit("tts", utils.getTTS("conclusion"));
-      io.to(roomId).emit("done");
-      utils.sendEmails(room.participants.map(x => x.email));
+      utils.getTTS("conclusion").then(audio => {
+        io.to(roomId).emit("tts", audio)
+        io.to(roomId).emit("done");
+
+        utils.sendEmails(room.participants.map(x => x.email));
+      });
+      
     }
     else{
       const currentStudent = room.participants[currentIndex];
     
-      io.to(roomId).emit("processPersonName", currentStudent.name);
-      io.to(roomId).emit("tts", utils.getTTS(currentStudent.name));
+      utils.getTTS(currentStudent.name).then(audio => {
+        io.to(roomId).emit("tts", audio)
+        io.to(roomId).emit("processPersonName", currentStudent.name);
 
-      room.index += 1;
+        room.index += 1;
+      });
+
     }
 
     console.log("processed");

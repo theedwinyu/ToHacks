@@ -14,6 +14,9 @@ class Room extends Component {
             name,
             isNewRoom
         } = this.props.location.state;
+
+        const socket = io("http://localhost:5000");
+        socket.emit("joinRoom", roomId, name, email, isNewRoom);
     }
 
     render(){
