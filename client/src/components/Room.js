@@ -138,7 +138,7 @@ class Room extends Component {
             let sensitivity = 0.5
             return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
         }
-    
+        
         this.setState({
             socket,
         })
@@ -197,11 +197,15 @@ class Room extends Component {
                 <div className="roomContainer"> 
                     
                     <Row>
-                    <Col span={16} style={{marginTop:'10vh'}}>
-                        <img src={Logo} style={{width:'30vh', height:'auto' }}></img>
+                    <Col span={16}>
+                        <div>
+                        <img src={Logo} style={{width:'40vh', height:'auto',display:'inline-block' }} />
+                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', marginLeft:'20vh'}}>Start Graduation</Button>}
+                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block'}}>Next Student</Button>}
+                        </div>
                         <div>
                         <h1 style={{display:'inline-block'}}>{`${universityName} class of ${classOf}`}</h1>
-                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
+                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID: {this.props.location.state.roomId}</h1>:null}
                         </div>
                         <div className="camBackground">
                             <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:150,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
@@ -209,19 +213,17 @@ class Room extends Component {
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
                         {debug ? <button onClick={this.fadeCanvasout}>out</button>:null}
-                        {/* {this.props.location.state.isNewRoom ? <button onClick={()=>{this.goNext(this.state.socket)}}>next</button>:null} */}
-
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52'}}>Next Student</Button>}
+                        
                         <canvas id="canvas" width="300" height="300" style={{display:"none"}}></canvas>
                         <audio id="cheerAudio" src={Audio.data}/>
                         
                         <audio id="ttsAudio" src=""/>
                     </Col>
-                    <Col span={8} style={{marginTop:'10vh'}}>
+                    <Col span={8} style={{marginTop:'12vh'}}>
+                        <div>
+                            <h1 style={{color: '#002A52', display:'inline-block'}}>Chat&nbsp;&nbsp;</h1>
+                        </div>
                         {socket && <Chatroom name={name} socket={socket} roomId={roomId}/>}
-
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52'}}>Start Graduation</Button>}
-
                     </Col>     
 
                     </Row>
