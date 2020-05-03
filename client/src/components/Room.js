@@ -7,6 +7,7 @@ import { Button, Row, Col, Menu, Layout } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
+import Confetti from 'react-confetti'
 
 const { Header, Content } = Layout;
 
@@ -17,6 +18,9 @@ class Room extends Component {
         this.state = {
             socket: null,
             test: null,
+            universityName: this.props.location.state.universityName,
+            classOf: this.props.location.state.classOf,
+            done: false
         };
 
     }
@@ -47,6 +51,14 @@ class Room extends Component {
                 sharedctx.drawImage(img,0,0)
             }
             img.src = image64
+        })
+
+        socket.on('roomInfo',(univname,classo)=>{
+            console.log(univname,classo)
+            this.setState({
+                universityName:univname,
+                classOf:classo
+            })
         })
 
         socket.on("processPersonName",(currName)=>{
@@ -82,6 +94,7 @@ class Room extends Component {
 
         socket.on("done",()=>{
             //confetti
+            this.setState({done:true})
 
         })
 
@@ -137,6 +150,7 @@ class Room extends Component {
             },1000/FPS)
 
         function handsPresent(results){
+            console.log(results)
             let sensitivity = 0.5
             return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
         }
@@ -195,18 +209,18 @@ class Room extends Component {
         const debug = false
         return (
             <div>
-
+                {this.state.done ? <Confetti width={window.innerWidth} height={window.innerHeight}/>:null}
                 <div className="roomContainer"> 
                     
                     <Row>
                     <Col span={16} style={{marginTop:'10vh'}}>
                         <img src={Logo} style={{width:'30vh', height:'auto' }}></img>
                         <div>
-                        <h1 style={{display:'inline-block'}}>{`${universityName} class of ${classOf}`}</h1>
+                        <h1 style={{display:'inline-block'}}>{`${this.state.universityName} class of ${this.state.classOf}`}</h1>
                         {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
                         </div>
                         <div className="camBackground">
-                            <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:'150',borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
+                            <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:150,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
