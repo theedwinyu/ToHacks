@@ -3,13 +3,11 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import io from 'socket.io-client';
 import ml5 from 'ml5';
-import { Button, Row, Col, Menu, Layout } from 'antd';
+import { Button, Row, Col } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
 import Confetti from 'react-confetti'
-
-const { Header, Content } = Layout;
 
 class Room extends Component {
     constructor(props) {
@@ -161,13 +159,6 @@ class Room extends Component {
     }
 
 
-    goNext(socket){
-        if(socket){
-            socket.emit("processPerson",this.props.location.state.roomId)
-        }
-
-    }
-
     fadeCanvasin(){
         console.log("askjdhbakjsdh")
         let shared = document.getElementById('shared')
@@ -183,13 +174,20 @@ class Room extends Component {
         shared.style.animation = 'none'
         setTimeout(()=>{shared.style.animation = ''},100)
     }
-  
-    nextStudent = (e) => {
-        
+
+    goNext = (socket) => {
+        if(socket){
+            socket.emit("processPerson",this.props.location.state.roomId)
+        }
     }
-
-    startGraduation = (e) => {
-
+  
+    startGraduation = (socket) => {
+        const {
+            universityName,
+            classOf,
+            roomId,
+        } = this.props.location.state;
+        socket.emit("startGraduation", roomId, universityName, classOf);
     }
 
     render(){
@@ -225,7 +223,9 @@ class Room extends Component {
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
                         {debug ? <button onClick={this.fadeCanvasout}>out</button>:null}
-                        {this.props.location.state.isNewRoom ? <button onClick={()=>{this.goNext(this.state.socket)}}>next</button>:null}
+                        {/* {this.props.location.state.isNewRoom ? <button onClick={()=>{this.goNext(this.state.socket)}}>next</button>:null} */}
+
+                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52'}}>Next Student</Button>}
                         <canvas id="canvas" width="300" height="300" style={{display:"none"}}></canvas>
                         <audio id="cheerAudio" src={Audio.data}/>
                         
@@ -234,21 +234,13 @@ class Room extends Component {
                     <Col span={8} style={{marginTop:'10vh'}}>
                         {socket && <Chatroom name={name} socket={socket} roomId={roomId}/>}
 
-                        {/* <Button key="submit" type="default" onClick={this.startGraduation} style={{color:'white', backgroundColor:'#002A52'}}>
-                            Start Graduation
-                        </Button>     
+                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52'}}>Start Graduation</Button>}
 
-                        <Button key="submit" type="default" onClick={this.nextStudent} style={{color:'white', backgroundColor:'#002A52'}}>
-                        Next Student
-                        </Button> */}
                     </Col>     
 
                     </Row>
 
                 </div>
-                
-                
-
                 
             </div>
 
