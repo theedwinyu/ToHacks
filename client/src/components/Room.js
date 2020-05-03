@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import io from 'socket.io-client';
 import ml5 from 'ml5';
-import { Button } from 'antd';
+import { Button, Row, Col, Menu, Layout } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
+import Logo from '../assets/logo.png'
+
+const { Header, Content } = Layout;
 
 class Room extends Component {
     constructor(props) {
@@ -29,11 +32,12 @@ class Room extends Component {
             isNewRoom
         } = this.props.location.state;
 
-        const FPS = 15
+        const FPS = 10
         const socket = io("http://localhost:5000");
-        const isFocused = true
+        this.setState({socket:socket})
+        let isFocused = false
         let recieved = false
-        socket.emit("joinRoom", roomId, name, email, isNewRoom);
+        socket.emit("joinRoom", roomId, name, email, isNewRoom, universityName, classOf);
 
         socket.on("shareVideo",(image64)=>{
             let shared = document.getElementById('shared')
@@ -44,8 +48,22 @@ class Room extends Component {
             }
             img.src = image64
         })
+
+        socket.on("processPersonName",(currName)=>{
+
+            let shared = document.getElementById('shared')
+            shared.setAttribute("class","fadeinclass")
+            shared.style.animation = 'none'
+            setTimeout(()=>{shared.style.animation = ''},100)
+
+            isFocused = (name == currName)
+        })
     
         socket.on("playCheer",()=>{
+            setTimeout(()=>{
+                this.fadeCanvasout()
+            },3000)
+
             let cheerAudio = document.getElementById('cheerAudio')
             cheerAudio.pause()
             cheerAudio.currentTime = 0
@@ -62,58 +80,78 @@ class Room extends Component {
             ttsAudio.play()
         })
 
-        // if (navigator.mediaDevices.getUserMedia) {
-        //     navigator.mediaDevices.getUserMedia({ video: true })
-        //         .then(function (stream) {
-        //         let video = document.getElementById('video')
-        //         video.srcObject = stream;
-        //         video.play();
-        //         })
-        //         .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // }
+        socket.on("done",()=>{
+            //confetti
 
+        })
+
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                let video = document.getElementById('video')
+                video.srcObject = stream;
+                video.play();
+                })
+                .catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        const options = {
+            multiplier:0.50,
+            detectionType:"single",
+            imageScaleFactor:0.2
+        }
+        const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
+        function modelLoaded() {
+            // console.log('Model Loaded!');
+        }
+        poseNet.on('pose', (poses) => {
+            if(poses){
+                if(isFocused && handsPresent(poses) && !recieved){
+                    recieved = true
+                    console.log("fuck")
+                    socket.emit("getDiploma",roomId)
+                    setTimeout(()=>{
+                        socket.emit("processPerson",this.props.location.state.roomId)
+                    },5000)
+                }
+            }
         
-        // const poseNet = ml5.poseNet(document.getElementById('video'),"single", modelLoaded);
-        // function modelLoaded() {
-        //     // console.log('Model Loaded!');
-        // }
-        // poseNet.on('pose', (poses) => {
-        //     if(poses){
-        //         if(isFocused && handsPresent(poses) && !recieved){
-        //             recieved = true
-        //             console.log("fuck")
-        //             socket.emit("getDiploma",roomId)
-        //             this.setState({test:"fuck"})
-        //         }
-        //     }
-        
-        // });
+        });
 
-        // let intervalID = window.setInterval(
-        //     ()=>{
-        //         let video = document.getElementById('video')
-        //         let canvas = document.getElementById('canvas')
-        //         let ctx = canvas.getContext('2d')
-        //         let shortside = Math.min(video.videoWidth,video.videoHeight)
-        //         let ydiff = (video.videoHeight - shortside)/2
-        //         let xdiff = (video.videoWidth - shortside)/2
-        //         ctx.drawImage(video,xdiff,ydiff,shortside,shortside,
-        //             0,0,canvas.width,canvas.height)
-                
-        //         socket.emit("sendVideoFrames",roomId,canvas.toDataURL())
+        let intervalID = window.setInterval(
+            ()=>{
+                let video = document.getElementById('video')
+                let canvas = document.getElementById('canvas')
+                let ctx = canvas.getContext('2d')
+                let shortside = Math.min(video.videoWidth,video.videoHeight)
+                let ydiff = (video.videoHeight - shortside)/2
+                let xdiff = (video.videoWidth - shortside)/2
+                ctx.drawImage(video,xdiff,ydiff,shortside,shortside,
+                    0,0,canvas.width,canvas.height)
+                if(isFocused){
+                    socket.emit("sendVideoFrames",roomId,canvas.toDataURL())
+                }
 
-        //     },1000/FPS)
+            },1000/FPS)
 
-        // function handsPresent(results){
-        //     let sensitivity = 0.4
-        //     return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
-        // }
+        function handsPresent(results){
+            let sensitivity = 0.5
+            return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
+        }
     
         this.setState({
             socket,
         })
+    }
+
+
+    goNext(socket){
+        if(socket){
+            socket.emit("processPerson",this.props.location.state.roomId)
+        }
+
     }
 
     fadeCanvasin(){
@@ -154,27 +192,54 @@ class Room extends Component {
             socket
         } = this.state;
         console.log(this.props.location.state);
+        const debug = false
         return (
             <div>
-                <h1>Hello</h1>
-                {/* <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
-                <button onClick={this.fadeCanvasin}>in</button>
-                <button onClick={this.fadeCanvasout}>out</button>
-                <canvas id="canvas" width="250" height="250" style={{display:"none"}}></canvas>
-                <canvas id="shared" width="250" height="250" style={{borderRadius:175,borderStyle: "double",borderWidth:15}}></canvas>
-                <audio id="cheerAudio" src={Audio.data}/>
-                <audio id="ttsAudio" src=""/> */}
-                {socket && <Chatroom name={name} socket={socket} roomId={roomId}/>}
 
-                <Button key="submit" type="default" onClick={this.startGraduation} style={{color:'white', backgroundColor:'#002A52'}}>
-                    Start Graduation
-                </Button>
+                <div className="roomContainer"> 
+                    {/* <Row>
+                        <Col span={8}>
+                            <img src={Logo} style={{width:'50vh', height:'auto'}}></img>
+                        </Col>
+                    </Row> */}
+                    
+                    <Row>
+                    <Col span={16} style={{marginTop:'20vh', paddingLeft:'10vh'}}>
 
-                <Button key="submit" type="default" onClick={this.nextStudent} style={{color:'white', backgroundColor:'#002A52'}}>
-                    Next Student
-                </Button>
+                        <h1>{`${universityName} class of ${classOf}`}</h1>
+                        {/* {this.props.location.state.isNewRoom ? <h1>RoomID:{this.props.location.state.roomId}</h1>:null} */}
+                        <div className="camBackground">
+                            <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:'150',borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
 
-            
+                        </div>
+                        <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
+                        {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
+                        {debug ? <button onClick={this.fadeCanvasout}>out</button>:null}
+                        {this.props.location.state.isNewRoom ? <button onClick={()=>{this.goNext(this.state.socket)}}>next</button>:null}
+                        <canvas id="canvas" width="300" height="300" style={{display:"none"}}></canvas>
+                        
+                        
+                        <audio id="ttsAudio" src=""/>
+                    </Col>
+                    <Col span={8} style={{marginTop:'10vh'}}>
+                        {socket && <Chatroom name={name} socket={socket} roomId={roomId}/>}
+
+                        {/* <Button key="submit" type="default" onClick={this.startGraduation} style={{color:'white', backgroundColor:'#002A52'}}>
+                            Start Graduation
+                        </Button>     
+
+                        <Button key="submit" type="default" onClick={this.nextStudent} style={{color:'white', backgroundColor:'#002A52'}}>
+                        Next Student
+                        </Button> */}
+                    </Col>     
+
+                    </Row>
+
+                </div>
+                
+                
+
+                
             </div>
 
         )

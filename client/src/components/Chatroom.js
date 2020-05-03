@@ -29,11 +29,11 @@ class Chatroom extends Component {
         const myName = this.props.name;
 
         socket.on("newMessage", (name, message) => {
-            if(name !== myName){
-                this.setState({
-                    comments: [...this.state.comments, {name, message}]
-                })
-            }  
+            // if(name !== myName){
+            this.setState({
+                comments: [...this.state.comments, {name, message}]
+            })
+            // }  
         })
 
     }
@@ -48,9 +48,9 @@ class Chatroom extends Component {
 
         socket.emit("chat", roomId, name, message);
         
-        this.setState({
-            comments: [...this.state.comments, {name, message}]
-        })
+        // this.setState({
+        //     comments: [...this.state.comments, {name, message}]
+        // })
     }
 
     render() {
@@ -59,11 +59,11 @@ class Chatroom extends Component {
             name,
         } = this.props;
         return (
-            <div>
+            <div style={{margin: '10vh'}}>
                 <h1 style={{color: '#002A52'}}>Card</h1>
-                <Card style={{ width: '100vh', height: '100vh', backgroundColor: '#A2BBD5', borderRadius: '10px' }}>
+                <Card style={{ width: '70vh', height: '80vh', backgroundColor: '#A2BBD5', borderRadius: '10px' }}>
                     <List
-                    style={{overflowY:'scroll', height: '80vh', textAlign: 'left'}}
+                    style={{overflowY:'scroll', height: '60vh', textAlign: 'left'}}
                     split={false}
                     bordered
                     dataSource={this.state.comments}
@@ -75,7 +75,7 @@ class Chatroom extends Component {
                     />
                     <br/>
                     <Search
-                        prefix={<b style={{marginRight:'1vh'}}>{name}</b>}
+                        prefix={<b>{name}</b>}
                         placeholder="Type a message"
                         enterButton="Send"
                         onSearch={value => this.handleSubmit(value)}

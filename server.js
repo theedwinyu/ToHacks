@@ -40,13 +40,13 @@ io.on("connection", (socket) => {
     if (!utils.hasProfanity(message)) {
       utils.checkSentiment(message).then((result) => {
         if (result.score >= 0) {
-          io.to(roomID).emit("newMessage", name, message);
+          io.to(roomId).emit("newMessage", name, message);
         }
       });
     }
   });
 
-  socket.on("joinRoom", (roomId, name, email, isNewRoom) => {
+  socket.on("joinRoom", (roomId, name, email, isNewRoom, universityName, classOf) => {
     console.log(JSON.stringify(allRooms));
 
     if (isNewRoom) {
@@ -57,6 +57,8 @@ io.on("connection", (socket) => {
           roomId,
           participants: [],
           index: 0,
+          universityName,
+          classOf,
         },
       ];
     } else {
