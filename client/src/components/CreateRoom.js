@@ -32,9 +32,9 @@ class CreateRoom extends Component {
         timeStarted: new Date().toLocaleString()
       };
   
-      axios.post("http://localhost:5000/graduations/add", graduationInfo).then((res) => {
-        console.log(res);
-      });
+      // axios.post("http://localhost:5000/graduations/add", graduationInfo).then((res) => {
+      //   console.log(res);
+      // });
   };
 
   onFinishFailed = (errorInfo) => {
