@@ -38,8 +38,13 @@ code {
   flex-direction: row;
   width:100vw;
   height:90vh;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+}
+
+.diplomafly{
+  position: relative;
+  animation:diplomanimation 3s forwards;
 }
 
 @keyframes fadein{
@@ -66,5 +71,21 @@ code {
   100% {
       opacity:0;
       left:20px;
+  }
+}
+
+@keyframes diplomanimation{
+  0% {
+      opacity:0;
+      left:-75px;
+  }
+  30%,70% {
+      opacity:1;
+      left:0px;
+      scale:2;
+  }
+  100% {
+      opacity:0;
+      left:75px;
   }
 }

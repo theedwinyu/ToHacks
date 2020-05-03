@@ -7,6 +7,7 @@ import { Button, Row, Col } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
+import Diploma from '../assets/diploma_1.png'
 import Confetti from 'react-confetti'
 
 class Room extends Component {
@@ -74,6 +75,13 @@ class Room extends Component {
                 this.fadeCanvasout()
             },3000)
 
+            let diplo = document.getElementById('diploma')
+            diplo.setAttribute("class","diplomafly")
+            diplo.style.animation = 'none'
+            setTimeout(()=>{diplo.style.animation = ''},100)
+
+
+
             let cheerAudio = document.getElementById('cheerAudio')
             cheerAudio.pause()
             cheerAudio.currentTime = 0
@@ -109,9 +117,6 @@ class Room extends Component {
         }
 
         const options = {
-            multiplier:0.50,
-            detectionType:"single",
-            imageScaleFactor:0.2
         }
         const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
         function modelLoaded() {
@@ -230,6 +235,7 @@ class Room extends Component {
                         <audio id="cheerAudio" src={Audio.data}/>
                         
                         <audio id="ttsAudio" src=""/>
+                        <img src={Diploma} id="diploma" style={{width:40, height:'auto', opacity:0}}></img>
                     </Col>
                     <Col span={8} style={{marginTop:'10vh'}}>
                         {socket && <Chatroom name={name} socket={socket} roomId={roomId}/>}

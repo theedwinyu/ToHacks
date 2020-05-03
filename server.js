@@ -68,18 +68,22 @@ io.on("connection", (socket) => {
 
       let room = allRooms.find((room) => room.roomId === roomId);
       console.log(`found room ${room}`);
-      univn = room.universityName
-      clas = room.classOf
+      if(room){
+          
+        univn = room.universityName
+        clas = room.classOf
 
-      room.participants = [
-        ...room.participants,
-        {
-          name,
-          email,
-        },
-      ];
-      console.log("a")
-      console.log(room.roomId)
+        room.participants = [
+          ...room.participants,
+          {
+            name,
+            email,
+          },
+        ];
+        console.log("a")
+        console.log(room.roomId)
+      
+      }
     }
 
     io.to(roomId).emit("newMessage", name, `${name} has joined!`);
