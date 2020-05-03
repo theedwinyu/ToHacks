@@ -128,7 +128,7 @@ class Room extends Component {
             if(poses){
                 if(isFocused && handsPresent(poses) && !recieved){
                     recieved = true
-                    console.log("fuck")
+                    console.log("focused")
                     socket.emit("getDiploma",roomId)
                     setTimeout(()=>{
                         socket.emit("processPerson",this.props.location.state.roomId)
@@ -183,7 +183,6 @@ class Room extends Component {
     }
 
     goNext = (socket) => {
-        console.log("uwu");
         if(socket){
             socket.emit("processPerson",this.props.location.state.roomId)
         }
@@ -191,7 +190,6 @@ class Room extends Component {
     }
   
     startGraduation = (socket) => {
-        console.log("gay");
         const {
             universityName,
             classOf,

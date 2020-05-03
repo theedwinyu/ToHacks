@@ -1,8 +1,14 @@
-const textToSpeech = require('@google-cloud/text-to-speech');
+const textToSpeech = require('@google-cloud/text-to-speech')({
+    projectId: 'api-practice-207806',
+    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+});
 const fs = require('fs');
 const util = require('util');
 const client = new textToSpeech.TextToSpeechClient();
-const language = require('@google-cloud/language');
+const language = require('@google-cloud/language')({
+    projectId: 'api-practice-207806',
+    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+});
 const Filter = require('bad-words');
 const sgMail = require('@sendgrid/mail');
 
