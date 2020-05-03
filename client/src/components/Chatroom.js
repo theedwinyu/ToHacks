@@ -49,7 +49,7 @@ class Chatroom extends Component {
 
         socket.emit("chat", roomId, name, text);
 
-        axios.get(`http://localhost:5000/api/googleLanguage?text=${text}`, ).then((res) => {
+        axios.get(`/api/googleLanguage?text=${text}`, ).then((res) => {
             
             const score = res.data.score;
             if(score < 0) {

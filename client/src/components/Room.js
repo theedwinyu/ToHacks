@@ -36,7 +36,7 @@ class Room extends Component {
         } = this.props.location.state;
 
         const FPS = 10
-        const socket = io("http://localhost:5000");
+        const socket = io("/");
         this.setState({socket:socket})
         let isFocused = false
         let recieved = false
