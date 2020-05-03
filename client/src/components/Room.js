@@ -181,12 +181,15 @@ class Room extends Component {
     }
 
     goNext = (socket) => {
+        console.log("uwu");
         if(socket){
             socket.emit("processPerson",this.props.location.state.roomId)
         }
+
     }
   
     startGraduation = (socket) => {
+        console.log("gay");
         const {
             universityName,
             classOf,
@@ -212,15 +215,19 @@ class Room extends Component {
         const debug = false
         return (
             <div>
+                
+                <div className = "topRight" >
+                    {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', marginLeft:'20vh', borderRadius: "10px"}}>Start Graduation</Button>}
+                    {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', borderRadius: "10px"}}>Next Student</Button>}
+                </div>
+
                 {this.state.done ? <Confetti width={window.innerWidth} height={window.innerHeight}/>:null}
                 <div className="roomContainer"> 
                     
                     <Row>
-                    <Col span={16}>
+                    <Col span={14} style ={{textAlign: 'left'}}>
                         <div>
                         <img src={Logo} style={{width:'40vh', height:'auto',display:'inline-block' }} />
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.startGraduation(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block', marginLeft:'20vh'}}>Start Graduation</Button>}
-                        {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block'}}>Next Student</Button>}
                         </div>
                         <div>
                         <h1 style={{display:'inline-block'}}>{`${this.state.universityName} class of ${this.state.classOf}`}</h1>
@@ -239,7 +246,7 @@ class Room extends Component {
                         
                         <audio id="ttsAudio" src=""/>
                     </Col>
-                    <Col span={8} style={{marginTop:'12vh'}}>
+                    <Col span={6} style={{marginTop:'15vh', marginLeft: "13vh", textAlign: 'left'}}>
                         <div>
                             <h1 style={{color: '#002A52', display:'inline-block'}}>Chat&nbsp;&nbsp;</h1>
                         </div>

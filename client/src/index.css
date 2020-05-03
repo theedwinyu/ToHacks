@@ -33,8 +33,10 @@ code {
   align-items: center;
   background-position: top center;
   border-radius: 10px ;
+  width: 100vh;
   height: 100vh;
   flex-direction: column;
+  margin-top: 3vh;
 }
 
 .roomContainer{
@@ -49,6 +51,12 @@ code {
 .diplomafly{
   position: relative;
   animation:diplomanimation 3s forwards;
+}
+
+.topRight {
+  position:absolute;
+  top:5vh;
+  right:22vh;
 }
 
 @keyframes fadein{
