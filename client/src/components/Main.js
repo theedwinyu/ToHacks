@@ -118,7 +118,7 @@ class Main extends Component {
             <MediaCard
               image={joinIcon}
               title={"Join a Ceremony"}
-              subText={"Student, Family, Friends"}
+              subText={"Students, Family, and Friends"}
               action = {this.showModal}
             />
             <Modal
