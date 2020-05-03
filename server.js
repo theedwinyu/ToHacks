@@ -52,10 +52,7 @@ io.on('connection',(socket) => {
       console.log(`${name}(${email}) created room: ${roomId}`);
       allRooms = [...allRooms, {
         roomId,
-        participants: [{
-          name,
-          email,
-        }],
+        participants: [],
         index: 0,
       }]
     }

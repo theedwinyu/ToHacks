@@ -3,10 +3,25 @@ import "../App.css";
 import TextField from "@material-ui/core/TextField";
 import { Form, Button } from "antd";
 import Logo from "../assets/logo.png";
+import { Redirect } from "react-router-dom";
+import uniqid from 'uniqid'
 
 class CreateRoom extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      redirect: false,
+      values: null,
+    }
+  }
+
   onFinish = (values) => {
     console.log("Success:", values);
+    this.setState({
+      redirect: true,
+      values,
+    });
   };
 
   onFinishFailed = (errorInfo) => {
@@ -14,23 +29,35 @@ class CreateRoom extends Component {
   };
 
   render() {
+    const {
+      redirect,
+      values,
+    } = this.state;
+    if (redirect) {
+      const {
+        fullName,
+        universityName,
+        classOf,
+      } = values;
+      const roomId = uniqid()
+      return <Redirect to={{ pathname: "/room", state: { universityName, classOf, name: fullName, roomId, isNewRoom: true } }} />;
+    }
     return (
-      <body>
-        <div class="split left">
-          <div class="topleft">
+      <div>
+        <div className="split left">
+          <div className="topleft">
             <img
               src={Logo}
-              style={{ width: "22vh", height: "7vh" }}
+              style={{ marginTop: '2vh', marginLeft: '10vh', width: "30vh", height: 'auto' }}
               alt="Logo"
             />
-            ;
           </div>
-          <div class="centered">
+          <div className="centered" style={{marginTop: '10vh'}}>
             <h1 style={{ textAlign: "left", fontSize: 45 }}>
               <b>Let's Plan the Ceremony!</b>
             </h1>
             <h2 style={{ textAlign: "left", fontSize: 18, marginTop: "-2vh" }}>
-              Give us some details so we can celebrate the graduates
+              Give us some details so we can celebrate the graduates!
             </h2>
 
             <Form
@@ -107,15 +134,15 @@ class CreateRoom extends Component {
                     borderRadius: '10px'
                   }}
                 >
-                  I'am All Set!
+                  I'm All Set!
                 </Button>
               </Form.Item>
             </Form>
           </div>
         </div>
 
-        <div class="split right"></div>
-      </body>
+        <div className="split right"></div>
+      </div>
     );
   }
 }
