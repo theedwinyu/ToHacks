@@ -197,27 +197,23 @@ class Room extends Component {
             <div>
 
                 <div className="roomContainer"> 
-                    {/* <Row>
-                        <Col span={8}>
-                            <img src={Logo} style={{width:'50vh', height:'auto'}}></img>
-                        </Col>
-                    </Row> */}
                     
                     <Row>
-                    <Col span={16} style={{marginTop:'20vh', paddingLeft:'10vh'}}>
-
-                        <h1>{`${universityName} class of ${classOf}`}</h1>
-                        {/* {this.props.location.state.isNewRoom ? <h1>RoomID:{this.props.location.state.roomId}</h1>:null} */}
+                    <Col span={16} style={{marginTop:'10vh'}}>
+                        <img src={Logo} style={{width:'30vh', height:'auto' }}></img>
+                        <div>
+                        <h1 style={{display:'inline-block'}}>{`${universityName} class of ${classOf}`}</h1>
+                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
+                        </div>
                         <div className="camBackground">
                             <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:'150',borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
-
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
                         {debug ? <button onClick={this.fadeCanvasout}>out</button>:null}
                         {this.props.location.state.isNewRoom ? <button onClick={()=>{this.goNext(this.state.socket)}}>next</button>:null}
                         <canvas id="canvas" width="300" height="300" style={{display:"none"}}></canvas>
-                        
+                        <audio id="cheerAudio" src={Audio.data}/>
                         
                         <audio id="ttsAudio" src=""/>
                     </Col>
