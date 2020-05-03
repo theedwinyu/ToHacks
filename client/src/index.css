@@ -23,6 +23,25 @@ code {
   animation:fadeout 1s forwards;
 }
 
+.camBackground {
+  background-image: url("./assets/backgroundRoom.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 640px;
+  height: 360px;
+  justify-content: center;
+  align-items: center;
+}
+
+.roomContainer{
+  display: flex;
+  flex-direction: row;
+  width:100vw;
+  height:90vh;
+  justify-content: space-around;
+  align-items: center;
+}
+
 @keyframes fadein{
   0% {
       left:-20px;
