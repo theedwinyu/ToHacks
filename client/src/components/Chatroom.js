@@ -43,8 +43,8 @@ class Chatroom extends Component {
 
         socket.emit("chat", roomId, name, text);
 
-        axios.get(`/api/googleLanguage?text=${text}`, ).then((res) => {
-            
+        axios.get(`/api/googleLanguage?text=${text}`).then((res) => {
+            console.log(res);
             const score = res.data.score;
             console.log(score);
             if(score < 0) {

@@ -166,7 +166,7 @@ app.get("/api/googleTTS", function (req, res) {
 });
 
 app.get("/api/googleLanguage", function (req, res) {
-  const text = req.param("text");
+  const text = req.query.text;
   console.log(text);
 
   const containsProfanity = utils.hasProfanity(text);
