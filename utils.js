@@ -14,7 +14,7 @@ hasProfanity = (text) => {
 getTTS = async (text) => {
     const request = {
         input: {text: text},
-        voice: {languageCode: 'en-GB', ssmlGender: 'MALE', name:'en-GB-Wavenet-D'},
+        voice: {languageCode: 'en-US', ssmlGender: 'MALE', name:'en-US-Standard-D'},
         audioConfig: {audioEncoding: 'MP3'},
     };
 
