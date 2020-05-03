@@ -5,6 +5,8 @@ import { Form, Button } from "antd";
 import Logo from "../assets/logo.png";
 import { Redirect } from "react-router-dom";
 import uniqid from 'uniqid'
+import axios from 'axios';
+
 
 class CreateRoom extends Component {
 
@@ -22,6 +24,17 @@ class CreateRoom extends Component {
       redirect: true,
       values,
     });
+
+    const graduationInfo = {
+        collegeName: values.universityName,
+        creator: values.fullName,
+        classOf: values.classOf,
+        timeStarted: new Date().toLocaleString()
+      };
+  
+      axios.post("http://localhost:5000/graduations/add", graduationInfo).then((res) => {
+        console.log(res);
+      });
   };
 
   onFinishFailed = (errorInfo) => {
