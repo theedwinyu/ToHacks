@@ -89,7 +89,7 @@ class Main extends Component {
       return <Redirect to={{ pathname: "/room", state: { studentId, name, roomId, email, isNewRoom: false } }} />;
     }
     if (this.state.createRedirect) {
-      return <Redirect to={{ pathname: "/create" }} />;
+      return <Redirect to={{ pathname: "/createRoom" }} />;
     }
 
     return (
@@ -134,7 +134,7 @@ class Main extends Component {
               <Row>
                 <Col span={12}>
                   <h2>Let's Get Your Diploma</h2>
-                  <b>Give us some details so you can *virtually* throw your cap in the air!</b>
+                  <p>Give us some details so you can *virtually* throw your cap in the air!</p>
                   <p></p>
                   <TextField id="standard-basic" label="Room ID" onChange={this.roomIdOnChange}/>
                   <p></p>

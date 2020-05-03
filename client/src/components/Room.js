@@ -9,6 +9,8 @@ class Room extends Component {
     componentDidMount(){
         const {
             studentId,
+            universityName,
+            classOf,
             email,
             roomId,
             name,
