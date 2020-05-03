@@ -59,7 +59,7 @@ class Chatroom extends Component {
             name,
         } = this.props;
         return (
-            <div style={{margin: '10vh'}}>
+            <div>
                 <h1 style={{color: '#002A52'}}>Card</h1>
                 <Card style={{ width: '70vh', height: '80vh', backgroundColor: '#A2BBD5', borderRadius: '10px' }}>
                     <List
