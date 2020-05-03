@@ -46,6 +46,7 @@ class Chatroom extends Component {
         axios.get(`/api/googleLanguage?text=${text}`, ).then((res) => {
             
             const score = res.data.score;
+            console.log(score);
             if(score < 0) {
                 message.error(`Sentiment score too low (${score}), please send a more positive message =D`, 1.5);
             }

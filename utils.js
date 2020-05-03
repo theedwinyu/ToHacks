@@ -27,7 +27,7 @@ getTTS = async (text) => {
 
 checkSentiment = async (text) => {
 
-    const client = new language.LanguageServiceClient({
+    const languageClient = new language.LanguageServiceClient({
         credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
     });
 
@@ -36,8 +36,11 @@ checkSentiment = async (text) => {
         type: 'PLAIN_TEXT',
     };
 
-    const [result] = await client.analyzeSentiment({document: document});
+    const [result] = await languageClient.analyzeSentiment({document: document});
     const sentiment = result.documentSentiment;
+
+    console.log(text);
+    console.log(sentiment);
 
     return sentiment;
 }
