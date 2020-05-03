@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 .App {
   text-align: center;
 }
@@ -11,6 +13,14 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.joinRoom-background {
+  background: url(./assets/backgroundCreate.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  height: '100vh';
 }
 
 .App-header {
