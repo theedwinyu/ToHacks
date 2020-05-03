@@ -51,6 +51,7 @@ code {
 .diplomafly{
   position: relative;
   animation:diplomanimation 3s forwards;
+  z-index:10
 }
 
 @keyframes fadein{
@@ -83,17 +84,17 @@ code {
 @keyframes diplomanimation{
   0% {
       opacity:0;
-      left:-75px;
-      top:-60px;
+      left:-70px;
+      top:-120px;
   }
   30%,70% {
       opacity:1;
-      left:0px;
-      top:-60px;
+      left:30px;
+      top:-120px;
   }
   100% {
       opacity:0;
-      left:75px;
-      top:-60px;
+      left:130px;
+      top:-120px;
   }
 }
