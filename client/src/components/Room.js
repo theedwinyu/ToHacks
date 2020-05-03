@@ -117,6 +117,8 @@ class Room extends Component {
         }
 
         const options = {
+            detectionType: 'single',
+            
         }
         const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
         function modelLoaded() {
@@ -227,8 +229,9 @@ class Room extends Component {
                         {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
                         </div>
                         <div className="camBackground">
+                        <img src={Diploma} id="diploma" style={{width:120, height:'auto', opacity:0}}></img>
                             <canvas id="shared" width="400" height="400" style={{opacity:0,borderRadius:200,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
-                            <img src={Diploma} id="diploma" style={{width:60, height:'auto', opacity:0}}></img>
+                            
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
