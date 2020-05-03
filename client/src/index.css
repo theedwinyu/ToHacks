@@ -11,3 +11,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.fadeinclass {
+  position: relative;
+  animation:fadein 1s forwards;
+}
+
+.fadeoutclass {
+  position: relative;
+  animation:fadeout 1s forwards;
+}
+
+@keyframes fadein{
+  0% {
+      left:-20px;
+  }
+  1% {
+    opacity:0;
+    left:-20px;
+
+  }
+  100% {
+      opacity:1;
+      left:0px;
+  }
+}
+
+
+@keyframes fadeout{
+  0% {
+      opacity:1;
+      left:0px;
+  }
+  100% {
+      opacity:0;
+      left:20px;
+  }
+}
