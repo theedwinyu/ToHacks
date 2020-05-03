@@ -223,13 +223,8 @@ class Room extends Component {
                         {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block'}}>Next Student</Button>}
                         </div>
                         <div>
-<<<<<<< HEAD
                         <h1 style={{display:'inline-block'}}>{`${this.state.universityName} class of ${this.state.classOf}`}</h1>
                         {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
-=======
-                        <h1 style={{display:'inline-block'}}>{`${universityName} class of ${classOf}`}</h1>
-                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID: {this.props.location.state.roomId}</h1>:null}
->>>>>>> 8a37a4dd2859cbbbea71fd1d6675a56e0e2be5c5
                         </div>
                         <div className="camBackground">
                             <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:150,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>

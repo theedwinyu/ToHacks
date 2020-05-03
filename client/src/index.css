@@ -38,15 +38,9 @@ code {
 .roomContainer{
   display: flex;
   flex-direction: row;
-<<<<<<< HEAD
-  width:100vw;
-  height:90vh;
-  justify-content: center;
-=======
   /* width:100vw; */
   /* height:100vh; */
   justify-content: space-around;
->>>>>>> 8a37a4dd2859cbbbea71fd1d6675a56e0e2be5c5
   align-items: center;
 }
 
