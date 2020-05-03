@@ -1,14 +1,10 @@
-const textToSpeech = require('@google-cloud/text-to-speech')({
-    projectId: 'api-practice-207806',
-    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
-});
+const textToSpeech = require('@google-cloud/text-to-speech');
 const fs = require('fs');
 const util = require('util');
-const client = new textToSpeech.TextToSpeechClient();
-const language = require('@google-cloud/language')({
-    projectId: 'api-practice-207806',
+const client = new textToSpeech.TextToSpeechClient({
     credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 });
+const language = require('@google-cloud/language');
 const Filter = require('bad-words');
 const sgMail = require('@sendgrid/mail');
 
@@ -31,7 +27,9 @@ getTTS = async (text) => {
 
 checkSentiment = async (text) => {
 
-    const client = new language.LanguageServiceClient();
+    const client = new language.LanguageServiceClient({
+        credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+    });
 
     const document = {
         content: text,
