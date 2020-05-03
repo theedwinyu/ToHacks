@@ -5,6 +5,8 @@ import io from 'socket.io-client';
 import ml5 from 'ml5';
 import { Button } from 'antd';
 
+import Audio from './Audio.js';
+
 class Room extends Component {
     constructor(props) {
 
@@ -144,7 +146,7 @@ class Room extends Component {
             <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
             <canvas id="canvas" width="250" height="250" style={{display:"none"}}></canvas>
             <canvas id="shared" width="250" height="250"></canvas>
-            <audio id="cheerAudio" src=""/>
+            <audio id="cheerAudio" src={Audio.data}/>
             <audio id="ttsAudio" src=""/>
             </div>
 
