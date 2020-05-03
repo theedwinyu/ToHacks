@@ -12,7 +12,7 @@ class Main extends Component {
   constructor() {
     super();
     this.state = {
-      joinRedirect: false,
+      visible: false,
       createRedirect: false,
       visible: false,
       roomId: '',
@@ -74,7 +74,7 @@ class Main extends Component {
   }
 
   createRoomClick = () => {
-    this.setState({ createRedirect: true, joinRedirect: false });
+    this.setState({ createRedirect: true, visible: false });
   };
 
   render() {
@@ -158,6 +158,18 @@ class Main extends Component {
             />
           </Grid>
         </Grid>
+        
+        {/* <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal> */}
+
       </div>
     );
   }
