@@ -48,6 +48,8 @@ io.on("connection", (socket) => {
 
   socket.on("joinRoom", (roomId, name, email, isNewRoom, universityName, classOf) => {
     console.log(JSON.stringify(allRooms));
+    let univn = universityName;
+    let clas = classOf;
 
     if (isNewRoom) {
       console.log(`${name}(${email}) created room: ${roomId}`);
@@ -66,19 +68,28 @@ io.on("connection", (socket) => {
 
       let room = allRooms.find((room) => room.roomId === roomId);
       console.log(`found room ${room}`);
+      if(room){
+          
+        univn = room.universityName
+        clas = room.classOf
 
-      room.participants = [
-        ...room.participants,
-        {
-          name,
-          email,
-        },
-      ];
+        room.participants = [
+          ...room.participants,
+          {
+            name,
+            email,
+          },
+        ];
+        console.log("a")
+        console.log(room.roomId)
+      
+      }
     }
 
     io.to(roomId).emit("newMessage", name, `${name} has joined!`);
     console.log(JSON.stringify(allRooms));
     socket.join(roomId);
+    io.to(roomId).emit("roomInfo", univn, clas);
   });
 
   socket.on("processPerson", (roomId) => {

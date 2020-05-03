@@ -7,6 +7,8 @@ import { Button, Row, Col, Alert } from 'antd';
 import Audio from './Audio';
 import Chatroom from './Chatroom';
 import Logo from '../assets/logo.png'
+import Diploma from '../assets/diploma_1.png'
+import Confetti from 'react-confetti'
 
 class Room extends Component {
     constructor(props) {
@@ -15,6 +17,9 @@ class Room extends Component {
         this.state = {
             socket: null,
             test: null,
+            universityName: this.props.location.state.universityName,
+            classOf: this.props.location.state.classOf,
+            done: false
         };
 
     }
@@ -47,6 +52,14 @@ class Room extends Component {
             img.src = image64
         })
 
+        socket.on('roomInfo',(univname,classo)=>{
+            console.log(univname,classo)
+            this.setState({
+                universityName:univname,
+                classOf:classo
+            })
+        })
+
         socket.on("processPersonName",(currName)=>{
 
             let shared = document.getElementById('shared')
@@ -61,6 +74,13 @@ class Room extends Component {
             setTimeout(()=>{
                 this.fadeCanvasout()
             },3000)
+
+            let diplo = document.getElementById('diploma')
+            diplo.setAttribute("class","diplomafly")
+            diplo.style.animation = 'none'
+            setTimeout(()=>{diplo.style.animation = ''},100)
+
+
 
             let cheerAudio = document.getElementById('cheerAudio')
             cheerAudio.pause()
@@ -80,68 +100,67 @@ class Room extends Component {
 
         socket.on("done",()=>{
             //confetti
+            this.setState({done:true})
 
         })
 
-        // if (navigator.mediaDevices.getUserMedia) {
-        //     navigator.mediaDevices.getUserMedia({ video: true })
-        //         .then(function (stream) {
-        //         let video = document.getElementById('video')
-        //         video.srcObject = stream;
-        //         video.play();
-        //         })
-        //         .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // }
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                let video = document.getElementById('video')
+                video.srcObject = stream;
+                video.play();
+                })
+                .catch(function (error) {
+                console.log(error);
+            });
+        }
 
-        // const options = {
-        //     multiplier:0.50,
-        //     detectionType:"single",
-        //     imageScaleFactor:0.2
-        // }
-        // const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
-        // function modelLoaded() {
-        //     // console.log('Model Loaded!');
-        // }
-        // poseNet.on('pose', (poses) => {
-        //     if(poses){
-        //         if(isFocused && handsPresent(poses) && !recieved){
-        //             recieved = true
-        //             console.log("fuck")
-        //             socket.emit("getDiploma",roomId)
-        //             setTimeout(()=>{
-        //                 socket.emit("processPerson",this.props.location.state.roomId)
-        //             },5000)
-        //         }
-        //     }
+        const options = {
+        }
+        const poseNet = ml5.poseNet(document.getElementById('video'),options, modelLoaded);
+        function modelLoaded() {
+            // console.log('Model Loaded!');
+        }
+        poseNet.on('pose', (poses) => {
+            if(poses){
+                if(isFocused && handsPresent(poses) && !recieved){
+                    recieved = true
+                    console.log("fuck")
+                    socket.emit("getDiploma",roomId)
+                    setTimeout(()=>{
+                        socket.emit("processPerson",this.props.location.state.roomId)
+                    },5000)
+                }
+            }
         
-        // });
+        });
 
-        // let intervalID = window.setInterval(
-        //     ()=>{
-        //         let video = document.getElementById('video')
-        //         let canvas = document.getElementById('canvas')
-        //         let ctx = canvas.getContext('2d')
-        //         let shortside = Math.min(video.videoWidth,video.videoHeight)
-        //         let ydiff = (video.videoHeight - shortside)/2
-        //         let xdiff = (video.videoWidth - shortside)/2
-        //         ctx.drawImage(video,xdiff,ydiff,shortside,shortside,
-        //             0,0,canvas.width,canvas.height)
-        //         if(isFocused){
-        //             socket.emit("sendVideoFrames",roomId,canvas.toDataURL())
-        //         }
+        let intervalID = window.setInterval(
+            ()=>{
+                let video = document.getElementById('video')
+                let canvas = document.getElementById('canvas')
+                let ctx = canvas.getContext('2d')
+                let shortside = Math.min(video.videoWidth,video.videoHeight)
+                let ydiff = (video.videoHeight - shortside)/2
+                let xdiff = (video.videoWidth - shortside)/2
+                ctx.drawImage(video,xdiff,ydiff,shortside,shortside,
+                    0,0,canvas.width,canvas.height)
+                if(isFocused){
+                    socket.emit("sendVideoFrames",roomId,canvas.toDataURL())
+                }
 
-        //     },1000/FPS)
+            },1000/FPS)
 
-        // function handsPresent(results){
-        //     let sensitivity = 0.5
-        //     return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
-        // }
+        function handsPresent(results){
+            console.log(results)
+            let sensitivity = 0.5
+            return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
+        }
         
-        // this.setState({
-        //     socket,
-        // })
+        this.setState({
+            socket,
+        })
     }
 
 
@@ -193,7 +212,7 @@ class Room extends Component {
         const debug = false
         return (
             <div>
-
+                {this.state.done ? <Confetti width={window.innerWidth} height={window.innerHeight}/>:null}
                 <div className="roomContainer"> 
                     
                     <Row>
@@ -204,17 +223,18 @@ class Room extends Component {
                         {isNewRoom && <Button key="submit" type="default" onClick={() => this.goNext(this.state.socket)} style={{color:'white', backgroundColor:'#002A52', display:'inline-block'}}>Next Student</Button>}
                         </div>
                         <div>
-                        <h1 style={{display:'inline-block'}}>{`${universityName} class of ${classOf}`}</h1>
-                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID: {this.props.location.state.roomId}</h1>:null}
+                        <h1 style={{display:'inline-block'}}>{`${this.state.universityName} class of ${this.state.classOf}`}</h1>
+                        {this.props.location.state.isNewRoom ? <h1 style={{display:'inline-block'}}>&nbsp; | RoomID:{this.props.location.state.roomId}</h1>:null}
                         </div>
                         <div className="camBackground">
-                            <canvas id="shared" width="300" height="300" style={{opacity:0,borderRadius:150,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
+                            <canvas id="shared" width="400" height="400" style={{opacity:0,borderRadius:200,borderStyle: "solid",borderWidth:15,borderColor:"white"}}></canvas>
+                            <img src={Diploma} id="diploma" style={{width:60, height:'auto', opacity:0}}></img>
                         </div>
                         <video id="video" height="1000" width="1000" autoPlay style={{display:"none"}}></video>
                         {debug ? <button onClick={this.fadeCanvasin}>in</button>:null}
                         {debug ? <button onClick={this.fadeCanvasout}>out</button>:null}
                         
-                        <canvas id="canvas" width="300" height="300" style={{display:"none"}}></canvas>
+                        <canvas id="canvas" width="400" height="400" style={{display:"none"}}></canvas>
                         <audio id="cheerAudio" src={Audio.data}/>
                         
                         <audio id="ttsAudio" src=""/>
