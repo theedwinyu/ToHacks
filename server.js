@@ -38,8 +38,9 @@ io.on('connection',(socket) => {
     if(!utils.hasProfanity(message)){
       utils.checkSentiment(message)
       .then((result)=>{
+        console.log(result.score);
         if(result.score >= 0){
-          io.to(roomID).emit("newMessage", name, message);
+          io.to(roomId).emit("newMessage", name, message);
         }
       })
     }
@@ -83,7 +84,7 @@ io.on('connection',(socket) => {
         io.to(roomId).emit("tts", audio)
         io.to(roomId).emit("done");
 
-        utils.sendEmails(room.participants.map(x => x.email));
+        utils.sendEmails(room.participants);
       });
       
     }
@@ -104,7 +105,7 @@ io.on('connection',(socket) => {
   })
 
   socket.on("getDiploma", (roomId) => {
-    console.log("FUCK")
+    console.log("diploma")
     io.to(roomId).emit("playCheer");
   })
 
@@ -147,9 +148,10 @@ app.get("/api/googleLanguage", function(req, res) {
 
 app.get("/api/send_email", function(req, res) {
   // const email = req.param('email');
-  const email = "edwin.j.yu@gmail.com";
+  const email = "sondh4231@gmail.com";
+  const name = "Donghyeon";
   
-  utils.sendEmails([email]);
+  utils.sendEmails([{email, name}]);
   res.send(`sent email to ${email}`)
 
 });

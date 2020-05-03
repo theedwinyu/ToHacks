@@ -42,14 +42,14 @@ sendEmails = (participants) => {
     console.log(participants);
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     console.log("key: ", process.env.SENDGRID_API_KEY);
-    participants.forEach(email => {
+    participants.forEach(x => {
         const msg = {
-            to: email,
+            to: x.email,
             from: 'uGraduated@gmail.com',
-            templateId: 'd-11f0c7665bf34b6c8df65cb92c179fdc',
+            templateId: 'd-c6861d28111a4fb892652fa95532eee3',
             dynamic_template_data: {
-                subject: 'Congratuations! uGraduated!',
-                title: 'Testing Title'
+                subject: `Congratuations ${x.name}! uGraduated!`,
+                name: x.name,
             },
         };
         sgMail.send(msg).then(() => {
