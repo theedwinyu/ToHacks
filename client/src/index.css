@@ -32,7 +32,9 @@ code {
   justify-content: center;
   align-items: center;
   background-position: top center;
+  border-radius: 10px ;
   height: 100vh;
+  flex-direction: column;
 }
 
 .roomContainer{
@@ -80,14 +82,16 @@ code {
   0% {
       opacity:0;
       left:-75px;
+      top:-60px;
   }
   30%,70% {
       opacity:1;
       left:0px;
-      scale:2;
+      top:-60px;
   }
   100% {
       opacity:0;
       left:75px;
+      top:-60px;
   }
 }
