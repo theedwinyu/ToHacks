@@ -60,8 +60,6 @@ class Room extends Component {
             ttsAudio.play()
         })
 
-        const poseNet = ml5.poseNet(()=>{console.log("ready!")});
-
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function (stream) {
@@ -73,6 +71,23 @@ class Room extends Component {
                 console.log(error);
             });
         }
+
+        
+        const poseNet = ml5.poseNet(document.getElementById('video'),"single", modelLoaded);
+        function modelLoaded() {
+            // console.log('Model Loaded!');
+        }
+        poseNet.on('pose', (poses) => {
+            if(poses){
+                if(isFocused && handsPresent(poses) && !recieved){
+                    recieved = true
+                    console.log("fuck")
+                    socket.emit("getDiploma",roomId)
+                    this.setState({test:"fuck"})
+                }
+            }
+        
+        });
 
         let intervalID = window.setInterval(
             ()=>{
@@ -86,23 +101,11 @@ class Room extends Component {
                     0,0,canvas.width,canvas.height)
                 
                 socket.emit("sendVideoFrames",roomId,canvas.toDataURL())
-                poseNet.singlePose(canvas)
-                .then(results => {
-                    if(isFocused && handsPresent(results) && !recieved){
-                        recieved = true
-                        console.log("fuck")
-                        socket.emit("getDiploma",roomId)
-                        this.setState({test:"fuck"})
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
 
             },1000/FPS)
 
         function handsPresent(results){
-            let sensitivity = 0.6
+            let sensitivity = 0.4
             return (results[0].pose.leftWrist.confidence > sensitivity || results[0].pose.rightWrist.confidence > sensitivity)
         }
         
